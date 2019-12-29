@@ -7,11 +7,11 @@
 <body>
 <form th:action="@{/admin/update}" method="post">
     <p>Login</p>
-    <p th:value="${user.login}">Login</p>
+    <p th:text="${user.login}">Login</p>
     <p>Name</p>
-    <p><input th:type="text" th:name="${user.name}"></p>
+    <p><input th:type="text" th:name="name"></p>
     <p>Password</p>
-    <p><input th:type="text" th:name="${user.password}">password</p>
+    <p><input th:type="text" th:name="password"></p>
 
     <input hidden="hidden" th:type="text" th:name="id" th:value="${user.id}">
     <input hidden="hidden" th:type="text" th:name="login" th:value="${user.login}">

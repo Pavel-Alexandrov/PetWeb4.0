@@ -30,18 +30,18 @@
         <td>Эксклюзивные возможности</td>
     </tr>
     <tr th:each="user : ${userList}">
-        <td th:value="${user.id}">id</td>
-        <td th:value="${user.login}">login</td>
-        <td th:value="${user.name}">name</td>
-        <td th:value="${user.password}">password</td>
+        <td th:text="${user.id}">id</td>
+        <td th:text="${user.login}">login</td>
+        <td th:text="${user.name}">name</td>
+        <td th:text="${user.password}">password</td>
         <td th:each="role : ${user.roles}">
-            <p th:value="${role}">role</p>
+            <p th:text="${role}">role</p>
         </td>
         <td>
-            <form th:action="@{/admin/delete/${user.id}}" method="post">
+            <form th:action="@{/admin/delete/{id}(id = ${user.id})}" method="post">
                 <button>Удалить пользователя</button>
             </form>
-            <form th:action="@{/admin/update/${user.id}}" method="get">
+            <form th:action="@{/admin/update/{id}(id = ${user.id})}" method="get">
                 <button>Изменить пользователя:</button>
             </form>
         </td>

@@ -1,5 +1,6 @@
 package crud.controller;
 
+import crud.model.Role;
 import crud.model.User;
 import crud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.HashSet;
 
 @Controller
 public class UserController {
@@ -26,7 +29,8 @@ public class UserController {
 
     @RequestMapping(value = "/user/home", method = RequestMethod.GET)
     public String UserProfile(Model model) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = new User(21, "7", "7", "$2a$10$LeNJyifVcDz7W8NIZe7NCOzo3BpZV4JJNqg7jShy/GcvfYED.tgVa", new HashSet<Role>());
         model.addAttribute("user", user);
 
         return "/user/profile";
