@@ -29,7 +29,8 @@ public class UserController {
 
     @RequestMapping(value = "/user/home", method = RequestMethod.GET)
     public String UserProfile(Model model) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = new User(21, "7", "7", "$2a$10$LeNJyifVcDz7W8NIZe7NCOzo3BpZV4JJNqg7jShy/GcvfYED.tgVa", new HashSet<Role>());
         model.addAttribute("user", user);
 
         return "/user/profile";
