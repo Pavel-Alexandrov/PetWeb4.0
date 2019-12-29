@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome!</title>
+</head>
+<body>
+<p>Hello <span th:text="${user.name}">User!</span></p>
+<p>Your data:</p>
+<p>Login: <span th:text="${user.login}">login</span></p>
+<p>Password: <span th:text="${user.password}">password</span></p>
+<p>Name: <span th:text="${user.name}">name</span></p>
+<form th:action="@{/user/update/${user.id}}">
+    <button name="id" th:value="${user.id}">Редактировать аккаунт:</button>
+    <input hidden="hidden", th:name="login" th:value="${user.login}">
+</form>
+<form th:action="@{/logout}" method="get">
+    <button>Выйти</button>
+</form>
+</body>
+</html>
