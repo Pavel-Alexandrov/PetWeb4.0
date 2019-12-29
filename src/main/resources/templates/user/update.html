@@ -9,9 +9,9 @@
     <p>Login</p>
     <p><span th:value="${user.login}"></span></p>
     <p>Name</p>
-    <p><input th:type="text" th:name="${user.name}"/></p>
+    <p><input th:type="text" th:name="name"/></p>
     <p>Password</p>
-    <p><input th:type="text" th:name="${user.password}"/></p>
+    <p><input th:type="text" th:name="password"/></p>
 
     <input hidden="hidden" th:type="text" th:name="id" th:value="${user.id}"/>
     <input hidden="hidden" th:type="text" th:name="id" th:value="${user.login}"/>
