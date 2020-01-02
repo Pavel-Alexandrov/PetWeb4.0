@@ -18,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
 
@@ -26,12 +27,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/admin/**").permitAll() /*.hasAuthority("admin")*/
-                .antMatchers("/user/**").permitAll() /*.hasAuthority("user")*/
+                .antMatchers("/admin/**")/*.permitAll()*/ .hasAuthority("admin")
+                .antMatchers("/user/**")/*.permitAll()*/ .hasAuthority("user")
                 .antMatchers("/login*").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
+                .loginProcessingUrl("/j_spring_security_check")
                 .loginPage("/login")
                 .successHandler(getAuthHandler())
                 .usernameParameter("login")
