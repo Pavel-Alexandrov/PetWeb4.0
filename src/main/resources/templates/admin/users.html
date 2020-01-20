@@ -1,57 +1,174 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>Список пользователей</title>
     <style type="text/css">
-        TABLE {
-            width: 700px;
-            border-collapse: collapse;
+        .sidebar-sticky {
+            margin-top: 50px;
+        }
+        MAIN {
+            margin-top: -85px;
         }
         TD, TH {
-            padding: 3px;
-            border: 1px solid black;
             text-align: center;
         }
-        TH {
-            background: #b0e0e6;
+        .edit, .del {
+            width: 50px;
         }
     </style>
 </head>
 <body>
-<h1>Текущие пользователи:</h1>
-<table>
-    <tr>
-        <td>id</td>
-        <td>login</td>
-        <td>name</td>
-        <td>password</td>
-        <td>roles</td>
-        <td>Эксклюзивные возможности</td>
-    </tr>
-    <tr th:each="user : ${userList}">
-        <td th:text="${user.id}">id</td>
-        <td th:text="${user.login}">login</td>
-        <td th:text="${user.name}">name</td>
-        <td th:text="${user.password}">password</td>
-        <td th:each="role : ${user.roles}">
-            <p th:text="${role}">role</p>
-        </td>
-        <td>
-            <form th:action="@{/admin/delete/{id}(id = ${user.id})}" method="post">
-                <button>Удалить пользователя</button>
-            </form>
-            <form th:action="@{/admin/update/{id}(id = ${user.id})}" method="get">
-                <button>Изменить пользователя:</button>
-            </form>
-        </td>
-    </tr>
-</table>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script>
+    $("#editModal").on('show.bs.modal', function(e) {
+        var id = 5;
+
+        this.getElementById('idInput').value = id;
+    });
+</script>
+
+    <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Preproject</a>
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" th:href="@{/logout}" th:method="get">Sign out</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">
+                                <span data-feather="home"></span>
+                                Admin <span class="sr-only">(current)</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">
+                                <span data-feather="file"></span>
+                                User
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <h2>Admin panel</h2>
+            <div class="nav-scroller py-1 mb-2">
+                <nav class="nav d-flex">
+                    <a class="p-2 btn btn-light">Users table</a>
+                    <a class="p-2"href="@{/admin/add}">New User</a>
+                </nav>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Login</th>
+                        <th>Name</th>
+                        <th>Password</th>
+                        <th>Roles</th>
+                        <th>Edit</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="user : ${userList}" th:id="${user.id}">
+                            <td th:text="${user.id}">id</td>
+                            <td th:text="${user.login}">login</td>
+                            <td th:text="${user.name}">name</td>
+                            <td th:text="${user.password}">password</td>
+                            <td th:each="role : ${user.roles}">
+                                <p th:text="${role}">role</p>
+                            </td>
+                            <td>
+                                <div class="row">
+                                    <form class="col-6 del" th:action="@{/admin/delete/{id}(id = ${user.id})}" method="post">
+                                        <input type="submit" value="del" class="btn btn-primary"/>
+                                    </form>
+                                    <form class="col-6 edit">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal">
+                                            edit
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form" id="edit-form" action="/admin/update" method="post">
+                        <div class="form-group">
+                            <label class="col-3 control-label" for="idInput">ID</label>
+                            <div class="col-9">
+                                <input type="text" class="form-control" id="idInput" th:name="id"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-3 control-label" for="loginInput">login</label>
+                            <div class="col-9">
+                                <input type="text" class="form-control" id="loginInput" th:name="login"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-3 control-label" for="nameInput">name</label>
+                            <div class="col-9">
+                                <input type="text" class="form-control" id="nameInput" th:name="name"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-3 control-label" for="passwordInput">password</label>
+                            <div class="col-9">
+                                <input type="text" class="form-control" id="passwordInput" th:name="password"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-3 control-label" for="roleInput">role</label>
+                            <div class="col-9">
+                                <select required class="form-control" id="roleInput" th:name="role">
+                                    <option>admin</option>
+                                    <option>user</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="edit-form">Edit user</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 <p><form th:action="@{/admin/add}" method="get">
     <button>Добавить пользователя:</button>
 </form></p>
-<form th:action="@{/logout}" method="get">
-    <button>Выйти</button>
-</form>
 </body>
 </html>

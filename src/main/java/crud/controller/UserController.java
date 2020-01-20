@@ -1,5 +1,6 @@
 package crud.controller;
 
+import crud.model.Role;
 import crud.model.User;
 import crud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 public class UserController {
@@ -86,7 +90,17 @@ public class UserController {
     }
 
     @RequestMapping(value = "/admin/update", method = RequestMethod.POST)
-    public String updateUserPost(@ModelAttribute("user") User user, Model model) {
+    public String updateUserPost(@ModelAttribute("id") String InputId, @ModelAttribute("login") String login,
+                                 @ModelAttribute("name") String name, @ModelAttribute("password") String password,
+                                 @ModelAttribute("role") String inputRole, Model model) {
+        Role role = new Role(inputRole);
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+
+        Integer id = Integer.parseInt(InputId);
+
+        User user = new User(id, login, name, password,roles);
+
         userService.updateUser(user);
         model.addAttribute("userList", userService.getAllUsers());
 
