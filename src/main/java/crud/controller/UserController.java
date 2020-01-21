@@ -76,6 +76,8 @@ public class UserController {
 
     @RequestMapping(value = "/admin/add", method = RequestMethod.POST)
     public String addUserPost(@ModelAttribute("user") User user, @ModelAttribute("access") String access, Model model) {
+
+
         userService.addUser(user, access);
         model.addAttribute("userList", userService.getAllUsers());
 
