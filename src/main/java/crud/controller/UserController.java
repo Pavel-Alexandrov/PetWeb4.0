@@ -4,6 +4,7 @@ import crud.model.Role;
 import crud.model.User;
 import crud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,7 +54,9 @@ public class UserController {
     //Админские страницы
     @RequestMapping(value = "/admin/home", method = RequestMethod.GET)
     public String userList(Model model) {
-        model.addAttribute("newUser", new User());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        model.addAttribute("currUser", user);
         model.addAttribute("userList", userService.getAllUsers());
 
         return "/admin/users";
