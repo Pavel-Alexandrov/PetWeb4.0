@@ -45,8 +45,18 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/update", method = RequestMethod.POST)
-    public String userUpdatePost(@ModelAttribute("user") User user) {
+    public String userUpdatePost(@ModelAttribute("id") String InputId, @ModelAttribute("login") String login,
+                                 @ModelAttribute("name") String name, @ModelAttribute("password") String password, Model model) {
+        Role role = new Role("user");
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+
+        Integer id = Integer.parseInt(InputId);
+
+        User user = new User(id, login, name, password,roles);
+
         userService.updateUser(user);
+        model.addAttribute("user", user);
 
         return "/user/profile";
     }
