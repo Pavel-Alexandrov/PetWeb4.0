@@ -19,6 +19,7 @@ public class UserDaoImpl implements UserDao {
     public List<User> getAllUsers() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<User> userList = entityManager.createQuery("from User u").getResultList();
+        entityManager.close();
         return userList;
     }
 
@@ -29,6 +30,7 @@ public class UserDaoImpl implements UserDao {
         entityManager.persist(user);
         entityManager.flush();
         entityManager.getTransaction().commit();
+        entityManager.close();
     }
 
     @Override
@@ -38,6 +40,7 @@ public class UserDaoImpl implements UserDao {
         entityManager.merge(user);
         entityManager.flush();
         entityManager.getTransaction().commit();
+        entityManager.close();
     }
 
     @Override
@@ -50,18 +53,23 @@ public class UserDaoImpl implements UserDao {
             entityManager.flush();
             entityManager.getTransaction().commit();
         }
+        entityManager.close();
         return user;
     }
 
     @Override
     public User getUserById(int id) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        return entityManager.find(User.class, id);
+        User user = entityManager.find(User.class, id);
+        entityManager.close();
+        return user;
     }
 
     @Override
     public User getUserByLogin(String login) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
-        return (User) entityManager.createQuery("FROM User U WHERE U.login = :lg").setParameter("lg", login).getSingleResult();
+        User user = (User) entityManager.createQuery("FROM User U WHERE U.login = :lg").setParameter("lg", login).getSingleResult();
+        entityManager.close();
+        return user;
     }
 }
