@@ -8,10 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -33,8 +30,13 @@ public class UserController {
     public String UserProfile(Model model) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("user", user);
+        model.addAttribute("userList", userService.getAllUsers());
+        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return "/user/profile";
+        model.addAttribute("currUser", currUser);
+        return "/admin/users";
+
+//        return "/user/profile";
     }
 
     @RequestMapping(value = "/user/update/{id}", method = RequestMethod.GET)
@@ -64,9 +66,9 @@ public class UserController {
     //Админские страницы
     @RequestMapping(value = "/admin/home", method = RequestMethod.GET)
     public String userList(Model model) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        model.addAttribute("currUser", user);
+        model.addAttribute("currUser", currUser);
         model.addAttribute("userList", userService.getAllUsers());
 
         return "/admin/users";
@@ -76,6 +78,9 @@ public class UserController {
     public String deleteUser(@PathVariable("id") int id, Model model) {
         userService.deleteUser(id);
         model.addAttribute("userList", userService.getAllUsers());
+        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        model.addAttribute("currUser", currUser);
 
         return "/admin/users";
     }
@@ -93,6 +98,9 @@ public class UserController {
 
         userService.addUser(user, access);
         model.addAttribute("userList", userService.getAllUsers());
+        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        model.addAttribute("currUser", currUser);
 
         return "/admin/users";
     }
@@ -105,9 +113,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "/admin/update", method = RequestMethod.POST)
-    public String updateUserPost(@ModelAttribute("id") String InputId, @ModelAttribute("login") String login,
-                                 @ModelAttribute("name") String name, @ModelAttribute("password") String password,
-                                 @ModelAttribute("role") String inputRole, Model model) {
+    public String updateUserPost(@RequestParam("id") String InputId, @RequestParam("login") String login,
+                                 @RequestParam("name") String name, @RequestParam("password") String password,
+                                 @RequestParam("role") String inputRole, Model model) {
         Role role = new Role(inputRole);
         Set<Role> roles = new HashSet<>();
         roles.add(role);
@@ -118,7 +126,9 @@ public class UserController {
 
         userService.updateUser(user);
         model.addAttribute("userList", userService.getAllUsers());
+        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        model.addAttribute("currUser", currUser);
         return "/admin/users";
     }
 }

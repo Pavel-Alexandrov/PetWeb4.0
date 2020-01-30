@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
-//глянуть @Transactional
+
 @Repository
 public class UserDaoImpl implements UserDao {
 
