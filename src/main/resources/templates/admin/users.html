@@ -24,8 +24,15 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
 
+        $("#admin-content-click")[0].click();
+        $("#users-table-click")[0].click();
 
+    });
+</script>
+    <!--top content-->
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
         <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Preproject</a>
         <ul class="navbar-nav px-3">
@@ -34,13 +41,14 @@
             </li>
         </ul>
     </nav>
+    <!--side bar-->
     <div class="container-fluid">
         <div class="row">
             <nav class="col-md-2 d-none d-md-block bg-light sidebar">
                 <div class="sidebar-sticky">
                     <ul class="nav nav-tabs flex-column">
                         <li class="nav-item">
-                            <a class="btn btn-primary btn-block" data-toggle="tab" href="#adminPanel">
+                            <a class="btn btn-primary btn-block" id="admin-content-click" data-toggle="tab" href="#adminPanel">
                                 Admin
                             </a>
                         </li>
@@ -60,7 +68,7 @@
                     <h2>Admin panel</h2>
 
                     <ul class="nav nav-tabs py-1 mb-2">
-                        <li><a data-toggle="tab" href="#users" class="p-2 btn btn-light">Users table</a></li>
+                        <li><a data-toggle="tab" href="#users" class="p-2 btn btn-light" id="users-table-click">Users table</a></li>
                         <li><a data-toggle="tab" href="#newUser" class="p-2 btn btn-light">New User</a></li>
                     </ul>
 
@@ -81,7 +89,6 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-<!--                                        <tr th:each="user : ${userList}" th:id="${user.id}">-->
                                         <tr th:each="user : ${userList}">
                                             <td th:text="${user.id}">id</td>
                                             <td th:text="${user.login}">login</td>
