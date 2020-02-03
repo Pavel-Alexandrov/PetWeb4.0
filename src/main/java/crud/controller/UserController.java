@@ -47,8 +47,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/update", method = RequestMethod.POST)
-    public String userUpdatePost(@ModelAttribute("id") String InputId, @ModelAttribute("login") String login,
-                                 @ModelAttribute("name") String name, @ModelAttribute("password") String password, Model model) {
+    public String userUpdatePost(@RequestParam("id") String InputId, @RequestParam("login") String login,
+                                 @RequestParam("name") String name, @RequestParam("password") String password, Model model) {
         Role role = new Role("user");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
@@ -93,7 +93,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/admin/add", method = RequestMethod.POST)
-    public String addUserPost(@ModelAttribute("user") User user, @ModelAttribute("access") String access, Model model) {
+    public String addUserPost(@ModelAttribute("user") User user, @RequestParam("access") String access, Model model) {
 
 
         userService.addUser(user, access);
