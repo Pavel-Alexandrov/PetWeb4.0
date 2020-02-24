@@ -32,9 +32,9 @@ public class AuthHandler implements AuthenticationSuccessHandler {
         }
 
         if (isAdmin) {
-            redirectStrategy.sendRedirect(request, response, "/admin/home");
+            redirectStrategy.sendRedirect(request, response, "/admin");
         } else if (isUser) {
-            redirectStrategy.sendRedirect(request, response, "/user/home");
+            redirectStrategy.sendRedirect(request, response, "/user");
         } else {
             throw new IOException("не установлены права");
         }

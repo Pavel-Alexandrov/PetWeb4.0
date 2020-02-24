@@ -4,6 +4,7 @@ import crud.model.Role;
 import crud.model.User;
 import crud.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -13,20 +14,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Controller
+@RestController
 public class UserController {
 
     @Autowired
     public UserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @ResponseBody
     public String auth() {
         return "login";
     }
 
     //Юзерские страницы
 
-    @RequestMapping(value = "/user/home", method = RequestMethod.GET)
+    @RequestMapping(value = "/user", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
     public String UserProfile(Model model) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         model.addAttribute("user", user);
@@ -38,15 +41,9 @@ public class UserController {
         return "/user/profile";
     }
 
-    @RequestMapping(value = "/user/update/{id}", method = RequestMethod.GET)
-    public String userUpdateGet(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.getUserById(id));
-
-        return "/user/update";
-    }
-
-    @RequestMapping(value = "/user/update", method = RequestMethod.POST)
-    public String userUpdatePost(@RequestParam("id") String InputId, @RequestParam("login") String login,
+    @RequestMapping(value = "/user", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public String userUpdate(@RequestParam("id") String InputId, @RequestParam("login") String login,
                                  @RequestParam("name") String name, @RequestParam("password") String password, Model model) {
         Role role = new Role("user");
         Set<Role> roles = new HashSet<>();
@@ -63,7 +60,8 @@ public class UserController {
     }
 
     //Админские страницы
-    @RequestMapping(value = "/admin/home", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
     public String userList(Model model) {
         User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -73,7 +71,8 @@ public class UserController {
         return "/admin/users";
     }
 
-    @RequestMapping(value = "/admin/delete/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/{id}", method = RequestMethod.DELETE, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
     public String deleteUser(@PathVariable("id") int id, Model model) {
         userService.deleteUser(id);
         model.addAttribute("userList", userService.getAllUsers());
@@ -84,15 +83,9 @@ public class UserController {
         return "/admin/users";
     }
 
-    @RequestMapping(value = "/admin/add", method = RequestMethod.GET)
-    public String addUserGet(Model model) {
-        model.addAttribute("user", new User());
-
-        return "/admin/add";
-    }
-
-    @RequestMapping(value = "/admin/add", method = RequestMethod.POST)
-    public String addUserPost(@ModelAttribute("user") User user, @RequestParam("access") String access, Model model) {
+    @RequestMapping(value = "/admin", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public String addUser(@ModelAttribute("user") User user, @RequestParam("access") String access, Model model) {
 
 
         userService.addUser(user, access);
@@ -104,15 +97,9 @@ public class UserController {
         return "/admin/users";
     }
 
-    @RequestMapping(value = "/admin/update/{id}", method = RequestMethod.GET)
-    public String updateUserGet(@PathVariable("id") int id, Model model) {
-        model.addAttribute("user", userService.getUserById(id));
-
-        return "/admin/update";
-    }
-
-    @RequestMapping(value = "/admin/update", method = RequestMethod.POST)
-    public String updateUserPost(@RequestParam("id") String InputId, @RequestParam("login") String login,
+    @RequestMapping(value = "/admin", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public String updateUser(@RequestParam("id") String InputId, @RequestParam("login") String login,
                                  @RequestParam("name") String name, @RequestParam("password") String password,
                                  @RequestParam("role") String inputRole, Model model) {
         Role role = new Role(inputRole);

@@ -3,6 +3,7 @@ package crud.dao;
 import crud.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -11,31 +12,28 @@ import javax.persistence.EntityManagerFactory;
 public class RoleDaoImpl implements RoleDao {
 
     @Autowired
-    public EntityManagerFactory entityManagerFactory;
+    public EntityManager entityManager;
 
+    // не используются
+    @Transactional
     @Override
     public void addRole(Role role) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
         role = entityManager.merge(role);
         entityManager.persist(role);
         entityManager.flush();
-        entityManager.getTransaction().commit();
     }
 
+    // не используются
+    @Transactional
     @Override
     public void deleteRole(Role role) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        entityManager.getTransaction().begin();
         role = entityManager.merge(role);
         entityManager.remove(role);
         entityManager.flush();
-        entityManager.getTransaction().commit();
     }
 
     @Override
     public Role getRoleByAccess(String access) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
         return (Role) entityManager.createQuery("FROM Role R WHERE R.access = :acs").setParameter("acs", access).getSingleResult();
     }
 }
