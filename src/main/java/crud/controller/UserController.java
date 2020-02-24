@@ -34,9 +34,8 @@ public class UserController {
         User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         model.addAttribute("currUser", currUser);
-        return "/admin/users";
 
-//        return "/user/profile";
+        return "/user/profile";
     }
 
     @RequestMapping(value = "/user/update/{id}", method = RequestMethod.GET)
