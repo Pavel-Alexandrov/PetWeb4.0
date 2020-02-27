@@ -8,5 +8,5 @@ public interface RoleDao {
 
     public void deleteRole(Role role);
 
-    public Role getRoleByAccess(String login);
+    public Role getRoleByAccess(String access);
 }

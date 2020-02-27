@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -45,20 +46,11 @@ public class UserController {
 
     @RequestMapping(value = "/user", method = RequestMethod.PATCH, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public String userUpdate(@RequestParam("id") String InputId, @RequestParam("login") String login,
-                                 @RequestParam("name") String name, @RequestParam("password") String password, Model model) {
-        Role role = new Role("user");
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
+    public User userUpdate(@RequestBody User updatedUser) {
+        userService.updateUser(updatedUser);
 
-        Integer id = Integer.parseInt(InputId);
-
-        User user = new User(id, login, name, password,roles);
-
-        userService.updateUser(user);
-        model.addAttribute("user", user);
-
-        return "/user/profile";
+        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return currUser;
     }
 
     //Админские страницы
@@ -77,48 +69,28 @@ public class UserController {
 
     @RequestMapping(value = "/admin/{id}", method = RequestMethod.DELETE, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public String deleteUser(@PathVariable("id") int id, Model model) {
+    public List<User> deleteUser(@PathVariable("id") int id) {
         userService.deleteUser(id);
-        model.addAttribute("userList", userService.getAllUsers());
-        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<User> userList = userService.getAllUsers();
 
-        model.addAttribute("currUser", currUser);
-
-        return "/admin/users";
+        return userList;
     }
 
     @RequestMapping(value = "/admin", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public String addUser(@ModelAttribute("user") User user, @RequestParam("access") String access, Model model) {
+    public List<User> addUser(@RequestBody User newUser) {
+        userService.addUser(newUser);
+        List<User> userList = userService.getAllUsers();
 
-
-        userService.addUser(user, access);
-        model.addAttribute("userList", userService.getAllUsers());
-        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        model.addAttribute("currUser", currUser);
-
-        return "/admin/users";
+        return userList;
     }
 
     @RequestMapping(value = "/admin", method = RequestMethod.PATCH, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public String updateUser(@RequestParam("id") String InputId, @RequestParam("login") String login,
-                                 @RequestParam("name") String name, @RequestParam("password") String password,
-                                 @RequestParam("role") String inputRole, Model model) {
-        Role role = new Role(inputRole);
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
+    public List<User> updateUser(@RequestBody User updatedUser) {
+        userService.updateUser(updatedUser);
+        List<User> userList = userService.getAllUsers();
 
-        Integer id = Integer.parseInt(InputId);
-
-        User user = new User(id, login, name, password,roles);
-
-        userService.updateUser(user);
-        model.addAttribute("userList", userService.getAllUsers());
-        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        model.addAttribute("currUser", currUser);
-        return "/admin/users";
+        return userList;
     }
 }

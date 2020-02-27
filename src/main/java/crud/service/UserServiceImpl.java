@@ -30,12 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUser(User user, String access) {
-        Role role = roleDao.getRoleByAccess(access);
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        user.setRoles(roles);
-
+    public void addUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userDao.addUser(user);
@@ -44,11 +39,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));  //тут тоже кодирование пароля
-
-        Role role = roleDao.getRoleByAccess("user");
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        user.setRoles(roles);
 
         userDao.updateUser(user);
     }
