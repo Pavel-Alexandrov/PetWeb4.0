@@ -20,28 +20,30 @@ public class UserController {
     @Autowired
     public UserService userService;
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    @ResponseBody
-    public String auth() {
-        return "login";
-    }
+//    Убран в PageController
+//    @RequestMapping(value = "/login", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+//    @ResponseBody
+//    public String auth() {
+//        return "login";
+//    }
 
     //Юзерские страницы
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public String UserProfile(Model model) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        model.addAttribute("user", user);
-        model.addAttribute("userList", userService.getAllUsers());
-        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//    Убран в PageController
+//    @RequestMapping(value = "/user", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+//    @ResponseBody
+//    public String UserProfile(Model model) {
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        model.addAttribute("user", user);
+//        model.addAttribute("userList", userService.getAllUsers());
+//        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//
+//        model.addAttribute("currUser", currUser);
+//
+//        return "/user/profile";
+//    }
 
-        model.addAttribute("currUser", currUser);
-
-        return "/user/profile";
-    }
-
-    @RequestMapping(value = "/user", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/user", method = RequestMethod.PATCH, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public String userUpdate(@RequestParam("id") String InputId, @RequestParam("login") String login,
                                  @RequestParam("name") String name, @RequestParam("password") String password, Model model) {
@@ -60,16 +62,18 @@ public class UserController {
     }
 
     //Админские страницы
-    @RequestMapping(value = "/admin", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    @ResponseBody
-    public String userList(Model model) {
-        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        model.addAttribute("currUser", currUser);
-        model.addAttribute("userList", userService.getAllUsers());
-
-        return "/admin/users";
-    }
+//    Убран в PageController
+//    @RequestMapping(value = "/admin", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+//    @ResponseBody
+//    public String userList(Model model) {
+//        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//
+//        model.addAttribute("currUser", currUser);
+//        model.addAttribute("userList", userService.getAllUsers());
+//
+//        return "/admin/users";
+//    }
 
     @RequestMapping(value = "/admin/{id}", method = RequestMethod.DELETE, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
@@ -97,7 +101,7 @@ public class UserController {
         return "/admin/users";
     }
 
-    @RequestMapping(value = "/admin", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/admin", method = RequestMethod.PATCH, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public String updateUser(@RequestParam("id") String InputId, @RequestParam("login") String login,
                                  @RequestParam("name") String name, @RequestParam("password") String password,
