@@ -3,6 +3,7 @@ package crud.service;
 import crud.dao.RoleDao;
 import crud.dao.UserDao;
 import crud.model.Role;
+import crud.model.TransportUser;
 import crud.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

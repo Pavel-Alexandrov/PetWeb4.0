@@ -1,6 +1,7 @@
 package crud.service;
 
 import crud.model.Role;
+import crud.model.TransportUser;
 import crud.model.User;
 
 import java.util.List;

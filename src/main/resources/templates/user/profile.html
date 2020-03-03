@@ -11,9 +11,100 @@
     </style>
 </head>
 <body>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.ajax({
+            url:"/user",
+            type:"get",
+            data: {},
+            success: (function (data) {
+                alert (JSON.stringify(data));
+                let user = {
+                    id: data.userId,
+                    name: data.name,
+                    login: data.login,
+                    password: data.password,
+                    roles: data.roles,
+                };
+                drawPage(user);
+            })
+        });
+    });
+
+    //извлечение полей из формы
+    $(document).on('click', '#send', function () {
+        let userId = $("#id-input").val();
+        let userName = $("#login-input").val();
+        let userLogin = $("#name-input").val();
+        let userPassword = $("#password-input").val();
+
+        //создание юзера для отправки
+        let sendUser = {
+            userId: userId,
+            name: userName,
+            login: userLogin,
+            password: userPassword,
+            roles: ["user"]
+        };
+
+        //put запрос на сервер
+        $.ajax({
+            url: "/user",
+            type: "PUT",
+            dataType: "json",
+            data: JSON.stringify(sendUser),
+            contentType: "application/json",
+            success: (function (data) {
+                alert (JSON.stringify(data));
+                let user = {
+                    id: data.userId,
+                    name: data.name,
+                    login: data.login,
+                    password: data.password,
+                    roles: data.roles,
+                };
+                drawPage(user);
+            })
+        })
+
+    });
+    
+    //отрисовка страницы
+    function drawPage(user) {
+        //для вывода данных на страницу юзера
+        let name1 = document.getElementById('user-name-1');
+        name1.innerHTML = user.name;
+        let name2 = document.getElementById('user-name-2');
+        name2.innerHTML = user.name;
+        let login = document.getElementById('user-login');
+        login.innerHTML = user.login;
+        let pass = document.getElementById('user-pass');
+        pass.innerHTML = user.password;
+
+        //для связки модального окна и кнопки
+        let modal = document.getElementById('user-modal');
+        modal.setAttribute("th:data-target", '#' + 'modal' + user.id);
+        modal.setAttribute("data-target", '#' + 'modal' + user.id);
+        let modalTab = document.getElementById('modal-tab');
+        modalTab.setAttribute("th:id", 'modal' + user.id);
+        modalTab.setAttribute("id", 'modal' + user.id);
+
+        //для вывода данных юзера в модальной форме
+        let idInput = document.getElementById('id-input');
+        idInput.setAttribute("value", user.id);
+        let loginInput = document.getElementById('login-input');
+        loginInput.setAttribute("value", user.login);
+        let nameInput = document.getElementById('name-input');
+        nameInput.setAttribute("value", user.name);
+        let passwordInput = document.getElementById('password-input');
+        passwordInput.setAttribute("value", user.password);
+    }
+</script>
 
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Preproject</a>
@@ -25,18 +116,16 @@
 </nav>
 
     <div class="container-fluid">
-        <p>Hello <span th:text="${user.name}">User!</span></p>
+        <p>Hello <span id="user-name-1">User!</span></p>
         <p>Your data:</p>
-        <p>Login: <span th:text="${user.login}">login</span></p>
-        <p>Password: <span th:text="${user.password}">password</span></p>
-        <p>Name: <span th:text="${user.name}">name</span></p>
-<!--        <form th:action="@{/user/update/{id}(id = ${user.id})}">-->
-<!--            <input hidden="hidden", th:type="text" th:name="login" th:value="${user.login}">-->
-        <button type="button" class="btn btn-primary" data-toggle="modal" th:attr="data-target='#' + 'editModal' + ${user.id}">Edit</button>
-<!--        </form>-->
+        <p>Login: <span id="user-login">login</span></p>
+        <p>Password: <span id="user-pass">password</span></p>
+        <p>Name: <span id="user-name-2">name</span></p>
+        <button type="button" id="user-modal" class="btn btn-primary" data-toggle="modal" th:data-target="'#modal-tab'">Edit</button>
+
 
         <!-- modal-->
-        <div class="modal fade" th:attr="id='editModal' + ${user.id}" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal fade" th:id="'modal-tab'" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -46,36 +135,26 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form class="form-horizontal" role="form" id="edit-form" action="/user" method="patch">
-                            <div class="form-group">
-                                <label class="col-3 control-label" for="idInput">ID</label>
-                                <div class="col-9">
-                                    <input type="text" class="form-control" id="idInput" th:value="${user.id}" th:name="id"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-3 control-label" for="loginInput">login</label>
-                                <div class="col-9">
-                                    <input type="text" class="form-control" id="loginInput" th:value="${user.login}" th:name="login"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-3 control-label" for="nameInput">name</label>
-                                <div class="col-9">
-                                    <input type="text" class="form-control" id="nameInput" th:value="${user.name}" th:name="name"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-3 control-label" for="passwordInput">password</label>
-                                <div class="col-9">
-                                    <input type="text" class="form-control" id="passwordInput" th:value="${user.password}" th:name="password"/>
-                                </div>
-                            </div>
-                        </form>
+                        <label class="col-3 control-label" for="id-input">ID</label>
+                        <div class="col-9">
+                            <input type="text" class="form-control" id="id-input" value="userId" th:name="id"/>
+                        </div>
+                        <label class="col-3 control-label" for="login-input">login</label>
+                        <div class="col-9">
+                            <input type="text" class="form-control" id="login-input" value="userLogin" th:name="login"/>
+                        </div>
+                        <label class="col-3 control-label" for="name-input">name</label>
+                        <div class="col-9">
+                            <input type="text" class="form-control" id="name-input" value="userName" th:name="name"/>
+                        </div>
+                        <label class="col-3 control-label" for="password-input">password</label>
+                        <div class="col-9">
+                            <input type="text" class="form-control" id="password-input" value="userPass" th:name="password"/>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" form="edit-form">Edit user</button>
+                        <button type="button" id="close-button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="send">Edit user</button>
                     </div>
                 </div>
             </div>

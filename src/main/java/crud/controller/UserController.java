@@ -1,8 +1,10 @@
 package crud.controller;
 
 import crud.model.Role;
+import crud.model.TransportUser;
 import crud.model.User;
 import crud.service.UserService;
+import crud.translator.UserTranslator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -21,51 +23,30 @@ public class UserController {
     @Autowired
     public UserService userService;
 
-//    Убран в PageController
-//    @RequestMapping(value = "/login", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-//    @ResponseBody
-//    public String auth() {
-//        return "login";
-//    }
-
     //Юзерские страницы
 
-//    Убран в PageController
-//    @RequestMapping(value = "/user", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-//    @ResponseBody
-//    public String UserProfile(Model model) {
-//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        model.addAttribute("user", user);
-//        model.addAttribute("userList", userService.getAllUsers());
-//        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//
-//        model.addAttribute("currUser", currUser);
-//
-//        return "/user/profile";
-//    }
-
-    @RequestMapping(value = "/user", method = RequestMethod.PATCH, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/user", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public User userUpdate(@RequestBody User updatedUser) {
-        userService.updateUser(updatedUser);
+    public TransportUser UserProfile() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return currUser;
+        TransportUser transportUser = UserTranslator.userToTransportUser(user);
+
+        return transportUser;
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public TransportUser userUpdate(@RequestBody TransportUser updatedUser) {
+
+        User user = UserTranslator.transportUserToUser(updatedUser);
+        userService.updateUser(user);
+
+        TransportUser transportUser = UserTranslator.userToTransportUser(user);
+        return transportUser;
     }
 
     //Админские страницы
-
-//    Убран в PageController
-//    @RequestMapping(value = "/admin", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-//    @ResponseBody
-//    public String userList(Model model) {
-//        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//
-//        model.addAttribute("currUser", currUser);
-//        model.addAttribute("userList", userService.getAllUsers());
-//
-//        return "/admin/users";
-//    }
 
     @RequestMapping(value = "/admin/{id}", method = RequestMethod.DELETE, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
