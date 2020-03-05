@@ -25,18 +25,14 @@ public class PageController {
 
     //юзер
     @RequestMapping(value = "/user/home", method = RequestMethod.GET)
-    public String UserProfile() {
+    public String userProfile() {
 
         return "/user/profile";
     }
 
     //админ
     @RequestMapping(value = "/admin/home", method = RequestMethod.GET)
-    public String userList(Model model) {
-        User currUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        model.addAttribute("currUser", currUser);
-        model.addAttribute("userList", userService.getAllUsers());
+    public String userList() {
 
         return "/admin/users";
     }

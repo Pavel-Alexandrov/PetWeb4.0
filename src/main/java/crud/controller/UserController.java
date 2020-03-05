@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class UserController {
 
     @RequestMapping(value = "/user", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public TransportUser UserProfile() {
+    public TransportUser userProfile() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         TransportUser transportUser = UserTranslator.userToTransportUser(user);
@@ -48,30 +49,69 @@ public class UserController {
 
     //Админские страницы
 
+    @RequestMapping(value = "/admin", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public List<TransportUser> adminProfile() {
+        List<User> users = userService.getAllUsers();
+        List<TransportUser> transportUsers = new ArrayList<>();
+
+        for (User user : users) {
+            TransportUser transportUser = UserTranslator.userToTransportUser(user);
+            transportUsers.add(transportUser);
+        }
+
+        return transportUsers;
+    }
+
     @RequestMapping(value = "/admin/{id}", method = RequestMethod.DELETE, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<User> deleteUser(@PathVariable("id") int id) {
-        userService.deleteUser(id);
-        List<User> userList = userService.getAllUsers();
+    public List<TransportUser> deleteUser(@PathVariable("id") String id) {
 
-        return userList;
+        int idInt = Integer.parseInt(id);
+        userService.deleteUser(idInt);
+
+        List<User> users = userService.getAllUsers();
+        List<TransportUser> transportUsers = new ArrayList<>();
+
+        for (User user : users) {
+            TransportUser transportUser = UserTranslator.userToTransportUser(user);
+            transportUsers.add(transportUser);
+        }
+
+        return transportUsers;
     }
 
     @RequestMapping(value = "/admin", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<User> addUser(@RequestBody User newUser) {
+    public List<TransportUser> addUser(@RequestBody TransportUser newTrUser) {
+        User newUser = UserTranslator.transportUserToUserWithoutId(newTrUser);
         userService.addUser(newUser);
-        List<User> userList = userService.getAllUsers();
 
-        return userList;
+        List<User> users = userService.getAllUsers();
+        List<TransportUser> transportUsers = new ArrayList<>();
+
+        for (User user : users) {
+            TransportUser transportUser = UserTranslator.userToTransportUser(user);
+            transportUsers.add(transportUser);
+        }
+
+        return transportUsers;
     }
 
-    @RequestMapping(value = "/admin", method = RequestMethod.PATCH, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/admin", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<User> updateUser(@RequestBody User updatedUser) {
-        userService.updateUser(updatedUser);
-        List<User> userList = userService.getAllUsers();
+    public List<TransportUser> updateUser(@RequestBody TransportUser updatedUser) {
+        User updUser = UserTranslator.transportUserToUser(updatedUser);
+        userService.updateUser(updUser);
 
-        return userList;
+        List<User> users = userService.getAllUsers();
+        List<TransportUser> transportUsers = new ArrayList<>();
+
+        for (User user : users) {
+            TransportUser transportUser = UserTranslator.userToTransportUser(user);
+            transportUsers.add(transportUser);
+        }
+
+        return transportUsers;
     }
 }

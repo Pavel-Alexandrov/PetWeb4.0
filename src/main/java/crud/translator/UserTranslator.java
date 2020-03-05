@@ -46,4 +46,19 @@ public class UserTranslator {
         User user = new User(transportUser.getUserId(), transportUser.getName(), transportUser.getLogin(), transportUser.getPassword(), roles);
         return user;
     }
+
+    public static User transportUserToUserWithoutId(TransportUser transportUser) {
+
+        //создается сет ролей для объекта User
+        Set<Role> roles = new HashSet<>();
+        Set<String> stringRoles = transportUser.getRoles();
+        for (String stringRole : stringRoles) {
+            Role role = new Role(stringRole);
+            roles.add(role);
+        }
+
+        //перевод TransportUser в User
+        User user = new User(transportUser.getName(), transportUser.getLogin(), transportUser.getPassword(), roles);
+        return user;
+    }
 }

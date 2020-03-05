@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Welcome!</title>
+</head>
+<body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        drawNewUserForm();
+    });
+
+    $(document).on('click', '#add-new-user', function () {
+        let id =  '100';
+        let userLogin = $('#new-login').val();
+        let userName = $('#new-name').val();
+        let userPassword = $('#new-password').val();
+        let userRole = $('#new-role').val();
+
+        let sendUser = {
+            userId: id,
+            name: userName,
+            login: userLogin,
+            password: userPassword,
+            roles: [userRole],
+        };
+
+        $.ajax({
+            url: "/admin",
+            type: "post",
+            dataType: "json",
+            data: JSON.stringify(sendUser),
+            contentType: "application/json",
+            success: (function (data) {
+                drawPage(data);
+            })
+        });
+
+        // alert(JSON.stringify(sendUser));
+    });
+
+    function drawNewUserForm() {
+        let userForm = document.getElementById('new-user-form');
+
+        $(userForm).append(
+            '<div class="row">' +
+                '<div class="col-4">' +
+                '</div>' +
+                '<div class="col-4">' +
+                    '<div class="row">' +
+                        '<div class="col-4">' +
+                        '</div>' +
+                        '<div class="col">' +
+                            '<h5>Login</h5>' +
+                        '</div>' +
+                        '<div class="col-12">' +
+                            '<input class="form-control" type="text" id="new-login" name="login">' +
+                        '</div>' +
+                        '<div class="col-4">' +
+                        '</div>' +
+                        '<div class="col">' +
+                            '<h5>Name</h5>' +
+                        '</div>' +
+                        '<div class="col-12">' +
+                            '<input class="form-control" type="text" id="new-name" name="name">' +
+                        '</div>' +
+                        '<div class="col-4">' +
+                        '</div>' +
+                        '<div class="col">' +
+                            '<h5>Password</h5>' +
+                        '</div>' +
+                        '<div class="col-12">' +
+                            '<input class="form-control" type="text" id="new-password" name="password">' +
+                        '</div>' +
+                        '<div class="col-4">' +
+                        '</div>' +
+                        '<div class="col-4">' +
+                            '<h5>Role</h5>' +
+                        '</div>' +
+                        '<div class="col-4">' +
+                        '</div>' +
+                        '<div class="col-12">' +
+                            '<select class="custom-select" required id="new-role" name="role">' +
+                                '<option>admin</option>' +
+                                '<option>user</option>' +
+                            '</select>' +
+                        '</div>' +
+                        '<div class="col-4">' +
+                        '</div>' +
+                        '<div class="col">' +
+                            '<input type="button" class="btn btn-success" id="add-new-user" value="Add new user">' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>'
+        );
+    }
+</script>
+
+    <div class="container-fluid" id="new-user-form">
+
+    </div>
+
+</body>
+</html>
