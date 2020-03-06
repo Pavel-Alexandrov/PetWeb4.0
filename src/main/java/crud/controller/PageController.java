@@ -36,4 +36,10 @@ public class PageController {
 
         return "/admin/users";
     }
+
+    @RequestMapping(value = "/admin/profile", method = RequestMethod.GET)
+    public String adminProfile() {
+
+        return "/admin/profile";
+    }
 }

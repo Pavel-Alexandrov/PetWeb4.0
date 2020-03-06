@@ -51,7 +51,7 @@ public class UserController {
 
     @RequestMapping(value = "/admin", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<TransportUser> adminProfile() {
+    public List<TransportUser> userList() {
         List<User> users = userService.getAllUsers();
         List<TransportUser> transportUsers = new ArrayList<>();
 
@@ -113,5 +113,16 @@ public class UserController {
         }
 
         return transportUsers;
+    }
+
+    //Профиль админа
+    @RequestMapping(value = "/adminProfile", method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @ResponseBody
+    public TransportUser adminProfile() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        TransportUser transportUser = UserTranslator.userToTransportUser(user);
+
+        return transportUser;
     }
 }

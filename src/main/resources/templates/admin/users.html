@@ -289,6 +289,22 @@
         );
     }
 
+    function drawAdminAsUserPage(user) {
+        let adminData = document.getElementById('user-panel');
+
+        adminData.append(
+            '<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">' +
+                '<h2>User panel</h2>' +
+
+                '<p>Hello <span text="' + user.name + '">User!</span></p>' +
+                '<p>Your data:</p>' +
+                '<p>Login: <span text="' + user.login + '">login</span></p>' +
+                '<p>Password: <span text="' + user.password + '">password</span></p>' +
+                '<p>Name: <span text="' + user.name + '">name</span></p>' +
+            '</main>'
+        )
+    }
+
 </script>
     <!--top content-->
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
@@ -311,7 +327,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="btn btn-primary btn-block" data-toggle="tab" href="#userPanel">
+                            <a class="btn btn-primary btn-block" id="user-panel-switch" href="/admin/profile">
                                 User
                             </a>
                         </li>
@@ -368,17 +384,17 @@
                 </main>
             </div>
             <!--admin as user panel-->
-            <div id="userPanel" class="tab-pane fade">
-                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-                    <h2>User panel</h2>
+<!--            <div id="user-panel" class="tab-pane fade">-->
+<!--                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">-->
+<!--                    <h2>User panel</h2>-->
 
-                    <p>Hello <span th:text="${currUser.name}">User!</span></p>
-                    <p>Your data:</p>
-                    <p>Login: <span th:text="${currUser.login}">login</span></p>
-                    <p>Password: <span th:text="${currUser.password}">password</span></p>
-                    <p>Name: <span th:text="${currUser.name}">name</span></p>
-                </main>
-            </div>
+<!--                    <p>Hello <span th:text="${currUser.name}">User!</span></p>-->
+<!--                    <p>Your data:</p>-->
+<!--                    <p>Login: <span th:text="${currUser.login}">login</span></p>-->
+<!--                    <p>Password: <span th:text="${currUser.password}">password</span></p>-->
+<!--                    <p>Name: <span th:text="${currUser.name}">name</span></p>-->
+<!--                </main>-->
+<!--            </div>-->
         </div>
     </div>
 </body>

@@ -23,7 +23,6 @@
             type:"get",
             data: {},
             success: (function (data) {
-                alert (JSON.stringify(data));
                 let user = {
                     id: data.userId,
                     name: data.name,
@@ -60,7 +59,6 @@
             data: JSON.stringify(sendUser),
             contentType: "application/json",
             success: (function (data) {
-                alert (JSON.stringify(data));
                 let user = {
                     id: data.userId,
                     name: data.name,
