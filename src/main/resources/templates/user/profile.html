@@ -18,6 +18,7 @@
 
 <script type="text/javascript">
     $(document).ready(function(){
+
         $.ajax({
             url:"/user",
             type:"get",
@@ -33,6 +34,8 @@
                 drawPage(user);
             })
         });
+
+        $("#user-panel-switch")[0].click();
     });
 
     //извлечение полей из формы
@@ -66,6 +69,7 @@
                     password: data.password,
                     roles: data.roles,
                 };
+                location.reload();
                 drawPage(user);
             })
         })
@@ -114,12 +118,31 @@
 </nav>
 
     <div class="container-fluid">
-        <p>Hello <span id="user-name-1">User!</span></p>
-        <p>Your data:</p>
-        <p>Login: <span id="user-login">login</span></p>
-        <p>Password: <span id="user-pass">password</span></p>
-        <p>Name: <span id="user-name-2">name</span></p>
-        <button type="button" id="user-modal" class="btn btn-primary" data-toggle="modal" th:data-target="'#modal-tab'">Edit</button>
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+                <div class="sidebar-sticky">
+                    <ul class="nav nav-tabs flex-column">
+                        <li class="nav-item">
+                            <a class="btn btn-primary btn-block" id="user-panel-switch" data-toggle="tab" href="#adminPanel">
+                                User
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="tab-content">
+            <div id="adminPanel" class="tab-pane fade">
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                    <h1>Hello <span id="user-name-1">User!</span></h1>
+                    <p>Your data:</p>
+                    <p>Login: <span id="user-login">login</span></p>
+                    <p>Password: <span id="user-pass">password</span></p>
+                    <p>Name: <span id="user-name-2">name</span></p>
+                    <button type="button" id="user-modal" class="btn btn-primary" data-toggle="modal" th:data-target="'#modal-tab'">Edit</button>
+                </main>
+            </div>
+        </div>
 
 
         <!-- modal-->

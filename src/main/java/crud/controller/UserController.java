@@ -98,9 +98,9 @@ public class UserController {
         return transportUsers;
     }
 
-    @RequestMapping(value = "/admin", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @RequestMapping(value = "/admin/{id}", method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
-    public List<TransportUser> updateUser(@RequestBody TransportUser updatedUser) {
+    public List<TransportUser> updateUser(@RequestBody TransportUser updatedUser, @PathVariable("id") String id) {
         User updUser = UserTranslator.transportUserToUser(updatedUser);
         userService.updateUser(updUser);
 
