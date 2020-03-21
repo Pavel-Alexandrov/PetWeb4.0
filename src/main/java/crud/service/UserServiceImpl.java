@@ -22,9 +22,6 @@ public class UserServiceImpl implements UserService {
     @Autowired
     public RoleDao roleDao;
 
-    @Autowired
-    public BCryptPasswordEncoder passwordEncoder;
-
     @Override
     public List<User> getAllUsers() {
         return userDao.getAllUsers();
@@ -32,14 +29,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void addUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         userDao.addUser(user);
     }
 
     @Override
     public void updateUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));  //тут тоже кодирование пароля
 
         userDao.updateUser(user);
     }
