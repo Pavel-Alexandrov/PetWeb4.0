@@ -86,8 +86,11 @@ public class UserController {
     @RequestMapping(value = "/admin", method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
     @ResponseBody
     public TransportUser[] addUser(@RequestBody TransportUser newTrUser) {
-        User newUser = UserTranslator.transportUserToUserWithoutId(newTrUser);
-        userService.addUser(newUser);
+        User oldUser = userService.getUserByLogin(newTrUser.getLogin());
+        if (oldUser == null) {
+            User newUser = UserTranslator.transportUserToUserWithoutId(newTrUser);
+            userService.addUser(newUser);
+        }
 
         List<User> users = userService.getAllUsers();
         TransportUser[] transportUsers = new TransportUser[100];
