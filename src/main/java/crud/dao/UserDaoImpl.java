@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import java.util.List;
 
 
@@ -57,7 +58,12 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public User getUserByLogin(String login) {
-        User user = (User) entityManager.createQuery("FROM User U WHERE U.login = :lg").setParameter("lg", login).getSingleResult();
+        User user;
+        try {
+            user = (User) entityManager.createQuery("FROM User U WHERE U.login = :lg").setParameter("lg", login).getSingleResult();
+        } catch (NoResultException nre) {
+            return null;
+        }
         return user;
     }
 }
